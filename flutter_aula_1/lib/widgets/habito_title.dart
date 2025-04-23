@@ -14,61 +14,42 @@ class HabitoTitle extends StatelessWidget {
     final isCompleted = habito.isCompletedToday();
 
     return Container(
-      margin: const EdgeInsets.all(16), // A margem aplicada ao Container
+      margin: const EdgeInsets.only(right: 16, left: 16, bottom: 8),
       decoration: BoxDecoration(
-        color: isCompleted ? Color(0XFFedfff4) : Color(0XFFfbfbfb),
-        borderRadius: BorderRadius.circular(12), // Bordas arredondadas
+        color: isCompleted ? const Color(0XFFedfff4) : const Color(0XFFfbfbfb),
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
-        children: [
-          // Coluna para o título e subtítulo
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Alinha à esquerda
-                children: [
-                  Text(
-                    habito.name,
-                    style: TextStyle(
-                      color:
-                          isCompleted
-                              ? Color(0XFF37C871)
-                              : Color(0XFF2F2F2F), // Cor desejada
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Frequência: ${habito.frequency}',
-                    style: TextStyle(
-                      color:
-                          isCompleted ? Color(0XFF37C871) : Color(0XFF2F2F2F),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+        title: Text(
+          habito.name,
+          style: TextStyle(
+            color:
+                isCompleted ? const Color(0XFF37C871) : const Color(0XFF2F2F2F),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
-          // Botão de check/uncheck
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: IconButton(
-              icon: Icon(
-                isCompleted ? Icons.check_circle : Icons.circle_outlined,
-                color: isCompleted ? Colors.green : Colors.grey,
-              ),
-              onPressed: () {
-                if (isCompleted) {
-                  habitoProvider.undoHabito(habito.id);
-                } else {
-                  habitoProvider.completeHabito(habito.id);
-                }
-              },
-            ),
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            isCompleted
+                ? Icons.check_box
+                : Icons.check_box_outline_blank_outlined,
+            color: isCompleted ? Colors.green : Colors.grey,
           ),
-        ],
+          onPressed: () {
+            if (isCompleted) {
+              habitoProvider.undoHabito(habito.id);
+            } else {
+              habitoProvider.completeHabito(habito.id);
+            }
+          },
+        ),
+        onTap: () {
+          Navigator.of(
+            context,
+          ).pushNamed('/habito-detail', arguments: habito.id);
+        },
       ),
     );
   }

@@ -30,9 +30,25 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
       reminderTime: _reminderTime,
     );
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Hábito salvo com sucesso!')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          'Hábito salvo com sucesso!',
+          style: TextStyle(
+            color: Color(0XFF37C871),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color(0XFFedfff4), // cor de fundo personalizada
+        behavior: SnackBarBehavior.floating, // faz flutuar acima do conteúdo
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // bordas arredondadas
+        ),
+        elevation: 0,
+        margin: const EdgeInsets.all(16), // margem ao redor
+        duration: const Duration(seconds: 3), // tempo de exibição
+      ),
+    );
 
     Navigator.of(context).pop();
   }

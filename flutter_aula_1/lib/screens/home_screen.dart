@@ -13,7 +13,8 @@ class HomeScreen extends StatelessWidget {
     final habitos = habitoProvider.habitos;
     final saudacao = Utils.saudacao();
     final hoje = DateTime.now();
-    final dataFormatada = '${Utils.formatarData(hoje)}'; // Crie essa função
+    final dataFormatada = '${Utils.formatarData(hoje)}';
+    final progresso = Utils.calcularProgressoHabitos(habitos);
 
     return Scaffold(
       appBar: null,
@@ -49,12 +50,64 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Colors.orangeAccent, Colors.deepOrange],
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${(progresso['completos']! > 0 ? progresso['completos']! / progresso['total']! * 100 : 0).toStringAsFixed(0)}%',
+                      style: const TextStyle(
+                        fontSize: 32,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${progresso['completos']} de ${progresso['total']} hábitos completos',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const Icon(Icons.calendar_month, size: 48, color: Colors.white),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 22,
+              left: 16,
+              bottom: 16,
+            ), // Ajuste o padding se necessário
+            child: Align(
+              alignment: Alignment.centerLeft, // Alinha o texto à esquerda
+              child: Text(
+                'Meus hábitos',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           // Verificação se há hábitos ou não
           habitos.isEmpty
               ? const Center(child: Text('Nenhum hábito cadastrado ainda.'))
               : Expanded(
                 // Garantir que o ListView ocupe o espaço disponível
                 child: ListView.builder(
+                  padding: EdgeInsets.zero,
                   itemCount: habitos.length,
                   itemBuilder: (ctx, index) {
                     final habito = habitos[index];
