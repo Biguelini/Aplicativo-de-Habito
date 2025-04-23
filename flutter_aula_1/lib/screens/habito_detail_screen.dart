@@ -27,12 +27,12 @@ class HabitoDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange,
-        title: Text(habito.name, style: TextStyle(color: Colors.white)),
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.white,
+        title: Text(habito.name, style: TextStyle(color: Colors.deepOrange)),
+        iconTheme: IconThemeData(color: Colors.deepOrange),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete, color: Colors.white),
+            icon: const Icon(Icons.delete, color: Colors.deepOrange),
             onPressed: () {
               Navigator.of(context).pop();
               Provider.of<HabitoProvider>(
@@ -61,7 +61,7 @@ class HabitoDetailScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.white),
+            icon: const Icon(Icons.edit, color: Colors.deepOrange),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

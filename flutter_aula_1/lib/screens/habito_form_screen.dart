@@ -66,16 +66,16 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.white,
         title: Text(
           "Novo Hábito",
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.deepOrange,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.deepOrange),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

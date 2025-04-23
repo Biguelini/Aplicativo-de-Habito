@@ -72,9 +72,12 @@ class _EditHabitoScreenState extends State<EditHabitoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange,
-        title: Text("Editar Hábito", style: TextStyle(color: Colors.white)),
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.white,
+        title: Text(
+          "Editar Hábito",
+          style: TextStyle(color: Colors.deepOrange),
+        ),
+        iconTheme: IconThemeData(color: Colors.deepOrange),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
