@@ -23,9 +23,8 @@ class HomeScreen extends StatelessWidget {
         children: [
           SafeArea(
             child: Container(
-              width:
-                  double.infinity, // Garante que ocupe toda a largura da tela
-              padding: const EdgeInsets.all(16), // Ajustando o padding
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -85,13 +84,9 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              top: 22,
-              left: 16,
-              bottom: 16,
-            ), // Ajuste o padding se necessário
+            padding: const EdgeInsets.only(top: 22, left: 16, bottom: 16),
             child: Align(
-              alignment: Alignment.centerLeft, // Alinha o texto à esquerda
+              alignment: Alignment.centerLeft,
               child: Text(
                 'Meus hábitos',
                 style: const TextStyle(
@@ -101,20 +96,14 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Verificação se há hábitos ou não
           habitos.isEmpty
               ? const Center(
                 child: Text(
                   'Nenhum hábito cadastrado ainda.',
-                  style: TextStyle(
-                    color:
-                        Colors
-                            .grey, // Você pode ajustar para o tom de cinza desejado
-                  ),
+                  style: TextStyle(color: Colors.grey),
                 ),
               )
-               : Expanded(
-                // Garantir que o ListView ocupe o espaço disponível
+              : Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: habitos.length,
@@ -131,7 +120,17 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pushNamed('/add-habito');
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.deepOrange, // Cor de fundo personalizada
+        shape: RoundedRectangleBorder(
+          // Forma arredondada para um visual mais moderno
+          borderRadius: BorderRadius.circular(100),
+        ),
+        elevation: 0, // Sombra suave para dar profundidade
+        child: const Icon(
+          Icons.add,
+          color: Colors.white, // Cor do ícone
+          size: 30, // Tamanho maior para maior destaque
+        ),
       ),
     );
   }

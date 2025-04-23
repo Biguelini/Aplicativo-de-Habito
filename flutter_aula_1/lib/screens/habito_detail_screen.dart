@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_aula_1/providers/habito_provider.dart';
 import 'package:flutter_aula_1/models/habito.dart';
+import 'package:flutter_aula_1/screens/habito_edit_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,6 @@ class HabitoDetailScreen extends StatelessWidget {
     try {
       habito = Provider.of<HabitoProvider>(context).getHabitoById(habitoId);
     } catch (e) {
-      // Caso o hábito não seja encontrado (excluído ou não exista), navegue para a tela principal
       WidgetsBinding.instance.addPostFrameCallback((_) {
         CircularProgressIndicator();
       });
@@ -27,10 +27,12 @@ class HabitoDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(habito.name),
+        backgroundColor: Colors.deepOrange,
+        title: Text(habito.name, style: TextStyle(color: Colors.white)),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete, color: Colors.white),
             onPressed: () {
               Navigator.of(context).pop();
               Provider.of<HabitoProvider>(
@@ -46,20 +48,24 @@ class HabitoDetailScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  backgroundColor: Color(
-                    0XFFedfff4,
-                  ), // cor de fundo personalizada
-                  behavior:
-                      SnackBarBehavior
-                          .floating, // faz flutuar acima do conteúdo
+                  backgroundColor: Color(0XFFedfff4),
+                  behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      12,
-                    ), // bordas arredondadas
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 0,
-                  margin: const EdgeInsets.all(16), // margem ao redor
-                  duration: const Duration(seconds: 3), // tempo de exibição
+                  margin: const EdgeInsets.all(16),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditHabitoScreen(habito: habito),
                 ),
               );
             },
@@ -70,10 +76,6 @@ class HabitoDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Center(
-              child: Text(habito.icon, style: const TextStyle(fontSize: 48)),
-            ),
-            const SizedBox(height: 16),
             ListTile(
               title: const Text('Frequência'),
               subtitle: Text(habito.frequency),
@@ -102,10 +104,7 @@ class HabitoDetailScreen extends StatelessWidget {
             ...habito.completedDates
                 .map(
                   (date) => ListTile(
-                    leading: const Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                    ),
+                    leading: const Icon(Icons.check_box, color: Colors.green),
                     title: Text(_formatDate(date)),
                   ),
                 )

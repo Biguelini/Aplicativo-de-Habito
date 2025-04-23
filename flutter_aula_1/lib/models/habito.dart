@@ -4,8 +4,7 @@ class Habito {
   final String id;
   String name;
   TimeOfDay? reminderTime;
-  String frequency; // se vai ser diario ou semanal etc
-  String icon;
+  String frequency;
   DateTime createdAt;
   List<DateTime> completedDates;
 
@@ -14,14 +13,12 @@ class Habito {
     required this.name,
     this.reminderTime,
     required this.frequency,
-    required this.icon,
     DateTime? createdAt,
     List<DateTime>? completedDates,
   }) : createdAt = createdAt ?? DateTime.now(),
        completedDates = completedDates ?? [];
 
   void completeToday() {
-    // marca o habito como finalizado pro dia atual
     final today = DateTime.now();
     if (!isCompletedToday()) {
       completedDates.add(DateTime(today.year, today.month, today.day));
@@ -29,7 +26,6 @@ class Habito {
   }
 
   bool isCompletedToday() {
-    // ver se o habito ja foi feito hoje
     final today = DateTime.now();
     return completedDates.any(
       (date) =>

@@ -1,58 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_aula_1/models/habito.dart';
 import 'package:flutter_aula_1/providers/habito_provider.dart';
 import 'package:provider/provider.dart';
 
-class HabitoFormScreen extends StatefulWidget {
-  const HabitoFormScreen({super.key});
+class EditHabitoScreen extends StatefulWidget {
+  final Habito habito;
+
+  const EditHabitoScreen({super.key, required this.habito});
 
   @override
-  State<HabitoFormScreen> createState() => _HabitoFormScreenState();
+  _EditHabitoScreenState createState() => _EditHabitoScreenState();
 }
 
-class _HabitoFormScreenState extends State<HabitoFormScreen> {
+class _EditHabitoScreenState extends State<EditHabitoScreen> {
   final _formKey = GlobalKey<FormState>();
+  late String _name;
+  late String _frequency;
+  late TimeOfDay? _reminderTime;
 
-  String _name = '';
-  String? _frequency = 'Diario';
-  TimeOfDay? _reminderTime;
+  @override
+  void initState() {
+    super.initState();
+    _name = widget.habito.name;
+    _frequency = widget.habito.frequency;
+    _reminderTime = widget.habito.reminderTime;
+  }
 
-  void _submitForm() {
-    final isValid = _formKey.currentState?.validate();
-    if (!isValid!) return;
-
-    _formKey.currentState!.save();
-
-    Provider.of<HabitoProvider>(context, listen: false).addHabito(
-      name: _name,
-      frequency: _frequency!,
-      reminderTime: _reminderTime,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text(
-          'Hábito salvo com sucesso!',
-          style: TextStyle(
-            color: Color(0XFF37C871),
-            fontWeight: FontWeight.bold,
+  void _saveForm() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      Provider.of<HabitoProvider>(context, listen: false).editHabito(
+        widget.habito.id,
+        name: _name,
+        frequency: _frequency,
+        remindertime: _reminderTime,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Alterações salvas com sucesso!',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 3),
         ),
-        backgroundColor: Color(0XFFedfff4),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 0,
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-
-    Navigator.of(context).pop();
+      );
+      Navigator.of(context).pop();
+    }
   }
 
   void _pickTime() async {
     final pickedTime = await showTimePicker(
       context: context,
-      initialTime: const TimeOfDay(hour: 8, minute: 0),
+      initialTime: _reminderTime ?? TimeOfDay.now(),
     );
 
     if (pickedTime != null) {
@@ -67,40 +73,27 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
-        title: Text(
-          "Novo Hábito",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: Text("Editar Hábito", style: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _name,
                 decoration: InputDecoration(
                   labelText: 'Nome do Hábito',
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepOrange,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
+                  labelStyle: TextStyle(color: Colors.deepOrange),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: Colors.deepOrange, width: 2),
                   ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey, width: 1),
                   ),
                 ),
                 validator: (value) {
@@ -111,25 +104,14 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                 },
                 onSaved: (value) => _name = value!.trim(),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: 'Frequência',
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepOrange,
-                  ),
+                  labelStyle: TextStyle(color: Colors.deepOrange),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: Colors.deepOrange),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.deepOrange, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
                   ),
                 ),
                 value: _frequency,
@@ -138,16 +120,13 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                         .map(
                           (option) => DropdownMenuItem(
                             value: option,
-                            child: Text(
-                              option,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            child: Text(option),
                           ),
                         )
                         .toList(),
                 onChanged: (value) {
                   setState(() {
-                    _frequency = value;
+                    _frequency = value!;
                   });
                 },
                 validator: (value) {
@@ -157,7 +136,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
@@ -181,21 +160,18 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 24),
               ElevatedButton.icon(
-                onPressed: _submitForm,
+                onPressed: _saveForm,
                 icon: const Icon(Icons.save),
-                label: const Text(
-                  'Salvar Hábito',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                label: const Text('Salvar alterações'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  backgroundColor: Colors.deepOrange,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
               ),
             ],
