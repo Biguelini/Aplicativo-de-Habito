@@ -14,7 +14,16 @@ class HabitoDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final habitoId = ModalRoute.of(context)!.settings.arguments as String;
-    final habito = Provider.of<HabitoProvider>(context).getHabitoById(habitoId);
+    Habito habito;
+    try {
+      habito = Provider.of<HabitoProvider>(context).getHabitoById(habitoId);
+    } catch (e) {
+      // Caso o hábito não seja encontrado (excluído ou não exista), navegue para a tela principal
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        CircularProgressIndicator();
+      });
+      return CircularProgressIndicator();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -23,11 +32,11 @@ class HabitoDetailScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
+              Navigator.of(context).pop();
               Provider.of<HabitoProvider>(
                 context,
                 listen: false,
               ).deleteHabito(habito.id);
-              Navigator.of(context).pop();
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(const SnackBar(content: Text('Hábito removido')));

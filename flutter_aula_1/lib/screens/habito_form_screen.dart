@@ -13,7 +13,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String _name = '';
-  String _frequency = '';
+  String? _frequency = 'Diario'; // Inicializamos como null
   String _icon = '';
   TimeOfDay? _reminderTime;
 
@@ -25,7 +25,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
 
     Provider.of<HabitoProvider>(context, listen: false).addHabito(
       name: _name,
-      frequency: _frequency,
+      frequency: _frequency!, // Garantimos que a frequência tenha valor
       icon: _icon,
       reminderTime: _reminderTime,
     );
@@ -53,7 +53,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Novo Hábito')),
+      appBar: AppBar(title: Text('Novo Hábito')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -64,7 +64,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                 decoration: const InputDecoration(labelText: 'Nome do Hábito'),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Por favor, inisira um nome.';
+                    return 'Por favor, insira um nome.';
                   }
                   return null;
                 },
@@ -72,17 +72,31 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Frequência',
+                  border: OutlineInputBorder(),
+                ),
                 value: _frequency,
-                items: const [
-                  DropdownMenuItem(value: 'Diário', child: Text('Diário')),
-                  DropdownMenuItem(value: 'Semanal', child: Text('Semanal')),
-                ],
+                items:
+                    ['Diario', 'Semanal']
+                        .map(
+                          (option) => DropdownMenuItem(
+                            value: option,
+                            child: Text(option),
+                          ),
+                        )
+                        .toList(),
                 onChanged: (value) {
                   setState(() {
-                    _frequency = value!;
+                    _frequency = value;
                   });
                 },
-                decoration: const InputDecoration(labelText: 'Frequência'),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Selecione uma frequência.';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               Row(
@@ -94,7 +108,6 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                           : 'Horário: ${_reminderTime!.format(context)}',
                     ),
                   ),
-
                   TextButton.icon(
                     onPressed: _pickTime,
                     icon: const Icon(Icons.access_time),

@@ -24,7 +24,7 @@ class Habito {
     // marca o habito como finalizado pro dia atual
     final today = DateTime.now();
     if (!isCompletedToday()) {
-      completedDates.add(DateTime(today.day, today.month, today.year));
+      completedDates.add(DateTime(today.year, today.month, today.day));
     }
   }
 
@@ -39,7 +39,7 @@ class Habito {
     );
   }
 
-  void undoToday() { // remove o registro de hoje caso o user desmarque
+  void undoToday() {
     final today = DateTime.now();
     completedDates.removeWhere(
       (date) =>
