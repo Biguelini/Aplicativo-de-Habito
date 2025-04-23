@@ -31,13 +31,10 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(
-          'Hábito salvo com sucesso!',
-          style: TextStyle(
-            color: Color(0XFF37C871),
-            fontWeight: FontWeight.bold,
-          ),
+          'Hábito criado com sucesso!',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color(0XFFedfff4),
+        backgroundColor: Colors.green,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 0,
@@ -67,14 +64,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
-          "Novo Hábito",
-          style: TextStyle(
-            color: Colors.deepOrange,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: Text("Novo Hábito", style: TextStyle(color: Colors.deepOrange)),
         iconTheme: IconThemeData(color: Colors.deepOrange),
       ),
       body: Padding(
@@ -115,10 +105,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: 'Frequência',
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepOrange,
-                  ),
+                  labelStyle: TextStyle(color: Colors.deepOrange),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: Colors.deepOrange),
@@ -138,10 +125,7 @@ class _HabitoFormScreenState extends State<HabitoFormScreen> {
                         .map(
                           (option) => DropdownMenuItem(
                             value: option,
-                            child: Text(
-                              option,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            child: Text(option),
                           ),
                         )
                         .toList(),

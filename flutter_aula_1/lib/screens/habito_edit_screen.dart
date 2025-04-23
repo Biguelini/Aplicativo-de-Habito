@@ -116,6 +116,14 @@ class _EditHabitoScreenState extends State<EditHabitoScreen> {
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: Colors.deepOrange),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.deepOrange, width: 2),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
                 ),
                 value: _frequency,
                 items:

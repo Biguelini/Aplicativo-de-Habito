@@ -42,13 +42,13 @@ class HabitoDetailScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text(
-                    'Hábito removido',
+                    'Hábito removido com sucesso!',
                     style: TextStyle(
-                      color: Color(0XFF37C871),
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  backgroundColor: Color(0XFFedfff4),
+                  backgroundColor: Colors.green,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
