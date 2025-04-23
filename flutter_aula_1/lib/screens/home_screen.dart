@@ -103,8 +103,17 @@ class HomeScreen extends StatelessWidget {
           ),
           // Verificação se há hábitos ou não
           habitos.isEmpty
-              ? const Center(child: Text('Nenhum hábito cadastrado ainda.'))
-              : Expanded(
+              ? const Center(
+                child: Text(
+                  'Nenhum hábito cadastrado ainda.',
+                  style: TextStyle(
+                    color:
+                        Colors
+                            .grey, // Você pode ajustar para o tom de cinza desejado
+                  ),
+                ),
+              )
+               : Expanded(
                 // Garantir que o ListView ocupe o espaço disponível
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
