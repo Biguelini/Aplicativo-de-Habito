@@ -3,7 +3,9 @@ import 'package:flutter_aula_1/models/habito.dart';
 class Utils {
   static String saudacao() {
     final hora = DateTime.now().hour;
-    if (hora < 12) {
+    if (hora < 6) {
+      return 'Boa noite';
+    } else if (hora < 12) {
       return 'Bom dia';
     } else if (hora < 18) {
       return 'Boa tarde';
