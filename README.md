@@ -65,9 +65,3 @@ Siga os passos abaixo para rodar o projeto localmente:
 - **Provider** — Biblioteca para gerenciamento de estado
 
 ---
-
-## Licença
-
-Este projeto é licenciado sob a licença **MIT**. Para mais detalhes, consulte o arquivo [LICENSE](LICENSE).
-
----
