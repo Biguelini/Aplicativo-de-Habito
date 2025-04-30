@@ -14,7 +14,7 @@ A interface foi projetada priorizando a **simplicidade** e a **experiência do 
 
 ## Responsabilidades da Equipe
 
-- **Felipe Thomazini**: .
+- **Felipe Thomazini**: Desenvolvimento das funções principais do app (cadastro, listagem e remoção de hábitos).
 - **João Pedro Biguelini**: Correção de bugs nas funções principais, aprimoramento da interface, implementação da edição de hábitos e criação deste README.
 - **Luiz Gustavo Rodrigues Cardoso**: Desenvolvimento das funções principais do app (cadastro, listagem e remoção de hábitos).
 
