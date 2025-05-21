@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "460074963895",
+    "project_id": "habito-7b6ad",
+    "storage_bucket": "habito-7b6ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460074963895:android:c0081b3683d53459580e32",
+        "android_client_info": {
+          "package_name": "com.example.flutter_aula_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEzLL_6vrB4oAL2IRLr3eG3RkXXiBVSAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

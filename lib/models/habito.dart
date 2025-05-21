@@ -44,4 +44,38 @@ class Habito {
           date.year == today.year,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'frequency': frequency,
+      'reminderTime':
+          reminderTime != null
+              ? {'hour': reminderTime!.hour, 'minute': reminderTime!.minute}
+              : null,
+      'createdAt': createdAt.toIso8601String(),
+      'completedDates': completedDates.map((d) => d.toIso8601String()).toList(),
+    };
+  }
+
+  factory Habito.fromMap(Map<String, dynamic> map) {
+    return Habito(
+      id: map['id'],
+      name: map['name'],
+      frequency: map['frequency'],
+      reminderTime:
+          map['reminderTime'] != null
+              ? TimeOfDay(
+                hour: map['reminderTime']['hour'],
+                minute: map['reminderTime']['minute'],
+              )
+              : null,
+      createdAt: DateTime.parse(map['createdAt']),
+      completedDates:
+          (map['completedDates'] as List<dynamic>)
+              .map((d) => DateTime.parse(d))
+              .toList(),
+    );
+  }
 }
