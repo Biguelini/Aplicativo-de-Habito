@@ -12,57 +12,76 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _name = '';
-  String _email = '';
-  String _password = '';
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   bool _isLoading = false;
   String? _errorMessage;
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Future<void> _register() async {
     final isValid = _formKey.currentState?.validate();
-    if (!isValid!) return;
-
-    _formKey.currentState!.save();
-
-    if (!mounted) return; // Verifica se ainda está montado
+    if (!isValid!) {
+      setState(() => _autoValidateMode = AutovalidateMode.always);
+      return;
+    }
 
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
     try {
       final credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: _email.trim(),
-            password: _password.trim(),
-          );
-      await credential.user?.updateDisplayName(_name.trim());
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-      if (!mounted) return; // Verifica antes de navegar
+      await credential.user?.updateDisplayName(name);
 
+      if (!mounted) return;
       Navigator.of(context).pushReplacementNamed('/home');
     } on FirebaseAuthException catch (e) {
-      if (!mounted) return; // Verifica antes de setState
-
+      if (!mounted) return;
       setState(() {
-        _errorMessage = e.message ?? 'Erro ao criar a conta';
+        switch (e.code) {
+          case 'email-already-in-use':
+            _errorMessage = 'Este e-mail já está em uso.';
+            break;
+          case 'invalid-email':
+            _errorMessage = 'E-mail inválido.';
+            break;
+          case 'weak-password':
+            _errorMessage = 'A senha é muito fraca.';
+            break;
+          default:
+            _errorMessage = 'Erro ao criar a conta.';
+        }
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'Erro inesperado ao criar a conta.';
       });
     } finally {
-      if (!mounted) return; // Verifica antes de setState
-
-      setState(() {
-        _isLoading = false;
-      });
+      if (!mounted) return;
+      setState(() => _isLoading = false);
     }
   }
 
   void _goToLogin() {
-    if (widget.onSwitchToLogin != null) {
-      widget.onSwitchToLogin!();
-    } else {
-      Navigator.of(context).pop();
-    }
+    Navigator.of(context).pushNamed('/login');
   }
 
   @override
@@ -75,11 +94,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.deepOrange),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
+          autovalidateMode: _autoValidateMode,
           child: ListView(
             children: [
               if (_errorMessage != null) ...[
@@ -87,6 +108,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 12),
               ],
               TextFormField(
+                key: const ValueKey('name'),
+                controller: _nameController,
                 decoration: const InputDecoration(
                   labelText: 'Nome',
                   labelStyle: TextStyle(color: Colors.deepOrange),
@@ -98,10 +121,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _name = value!,
               ),
               const SizedBox(height: 20),
               TextFormField(
+                key: const ValueKey('email'),
+                controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.deepOrange),
@@ -112,15 +136,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (value == null || value.trim().isEmpty) {
                     return 'Por favor, insira o email.';
                   }
-                  if (!value.contains('@')) {
+                  final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
+                  if (!emailRegex.hasMatch(value.trim())) {
                     return 'Insira um email válido.';
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value!,
               ),
               const SizedBox(height: 20),
               TextFormField(
+                key: const ValueKey('password'),
+                controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Senha',
                   labelStyle: TextStyle(color: Colors.deepOrange),
@@ -133,7 +159,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _password = value!,
               ),
               const SizedBox(height: 30),
               _isLoading

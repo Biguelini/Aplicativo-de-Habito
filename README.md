@@ -26,27 +26,53 @@ Siga os passos abaixo para rodar o projeto localmente:
 
 1. Clone este repositório:
 
-    ```bash
-    git clone https://github.com/Biguelini/Aplicativo-de-Habito.git
-    ```
+   ```bash
+   git clone https://github.com/Biguelini/Aplicativo-de-Habito.git
+   ```
 
 2. Navegue até a pasta do projeto:
 
-    ```bash
-    cd caminho/Aplicativo-de-Habito
-    ```
+   ```bash
+   cd caminho/Aplicativo-de-Habito
+   ```
 
 3. Instale as dependências necessárias:
 
-    ```bash
-    flutter pub get
-    ```
+   ```bash
+   flutter pub get
+   ```
 
-4. Execute o projeto em um emulador ou dispositivo real:
+4. Instale o Firebase CLI (se ainda não tiver)
+   Instale o Node.js (se não tiver): https://nodejs.org/
 
-    ```bash
-    flutter run
-    ```
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+   Faça login no Firebase:
+
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+5. Configure seu projeto Flutter com Firebase usando flutterfire
+   Instale o CLI do FlutterFire:
+
+   ```bash
+   dart pub global activate flutterfire_cli
+   ```
+
+   Configure o FlutterFire no seu projeto
+
+   ```bash
+   flutterfire configure
+   ```
+
+6. Execute o projeto em um emulador ou dispositivo real:
+
+   ```bash
+   flutter run
+   ```
 
 ---
 

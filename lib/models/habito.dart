@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Habito {
   final String id;
+  final String userId; // novo campo
   String name;
   TimeOfDay? reminderTime;
   String frequency;
@@ -10,6 +11,7 @@ class Habito {
 
   Habito({
     required this.id,
+    required this.userId, // obrigatório no construtor
     required this.name,
     this.reminderTime,
     required this.frequency,
@@ -49,6 +51,7 @@ class Habito {
     return {
       'id': id,
       'name': name,
+      'userId': userId,
       'frequency': frequency,
       'reminderTime':
           reminderTime != null
@@ -63,6 +66,7 @@ class Habito {
     return Habito(
       id: map['id'],
       name: map['name'],
+      userId: map['userId'],
       frequency: map['frequency'],
       reminderTime:
           map['reminderTime'] != null

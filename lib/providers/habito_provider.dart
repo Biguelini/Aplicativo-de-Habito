@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aula_1/models/habito.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
 class HabitoProvider with ChangeNotifier {
@@ -11,7 +12,19 @@ class HabitoProvider with ChangeNotifier {
   List<Habito> get habitos => [..._habitos];
 
   Future<void> fetchHabitos() async {
-    final snapshot = await _firestore.collection(_collection).get();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      _habitos.clear();
+      notifyListeners();
+      return;
+    }
+
+    final snapshot =
+        await _firestore
+            .collection(_collection)
+            .where('userId', isEqualTo: user.uid)
+            .get();
+
     _habitos.clear();
     _habitos.addAll(
       snapshot.docs.map(
@@ -26,9 +39,15 @@ class HabitoProvider with ChangeNotifier {
     required String frequency,
     TimeOfDay? reminderTime,
   }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('Usuário não autenticado');
+    }
+
     final id = const Uuid().v4();
     final newHabito = Habito(
       id: id,
+      userId: user.uid, // salva o uid do usuário
       name: name,
       frequency: frequency,
       reminderTime: reminderTime,

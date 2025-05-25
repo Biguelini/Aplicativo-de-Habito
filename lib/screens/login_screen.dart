@@ -12,16 +12,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _email = '';
-  String _password = '';
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   bool _isLoading = false;
   String? _errorMessage;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Future<void> _login() async {
     final isValid = _formKey.currentState?.validate();
     if (!isValid!) return;
-
-    _formKey.currentState!.save();
 
     setState(() {
       _isLoading = true;
@@ -30,14 +36,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _email.trim(),
-        password: _password.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
-      // Login bem-sucedido, navegue para a tela principal do app
       Navigator.of(context).pushReplacementNamed('/home');
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message ?? 'Erro ao fazer login';
+        if (e.code == 'invalid-email') {
+          _errorMessage = 'Email inválido.';
+        } else if (e.code == 'user-disabled') {
+          _errorMessage = 'Esta conta foi desativada.';
+        } else if (e.code == 'user-not-found') {
+          _errorMessage = 'Usuário não encontrado.';
+        } else if (e.code == 'wrong-password') {
+          _errorMessage = 'Senha incorreta.';
+        } else {
+          _errorMessage = 'Erro ao fazer login.';
+        }
       });
     } finally {
       setState(() {
@@ -61,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
         title: const Text('Login', style: TextStyle(color: Colors.deepOrange)),
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.deepOrange),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -73,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 12),
               ],
               TextFormField(
+                controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.deepOrange),
@@ -88,10 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value!,
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Senha',
                   labelStyle: TextStyle(color: Colors.deepOrange),
@@ -99,12 +116,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 obscureText: true,
                 validator: (value) {
-                  if (value == null || value.trim().length < 6) {
-                    return 'A senha deve ter no mínimo 6 caracteres.';
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Por favor, insira a senha.';
                   }
                   return null;
                 },
-                onSaved: (value) => _password = value!,
               ),
               const SizedBox(height: 30),
               _isLoading
