@@ -14,9 +14,9 @@ A interface foi projetada priorizando a **simplicidade** e a **experiência do 
 
 ## Responsabilidades da Equipe
 
-- **Felipe Thomazini**: Desenvolvimento das funções principais do app (cadastro, listagem e remoção de hábitos).
-- **João Pedro Biguelini**: Correção de bugs nas funções principais, aprimoramento da interface, implementação da edição de hábitos e criação deste README.
-- **Luiz Gustavo Rodrigues Cardoso**: Desenvolvimento das funções principais do app (cadastro, listagem e remoção de hábitos).
+- **Felipe Thomazini**: Fez a modificação do aplicativo para ele se tornar multi usuários (cada usuário ter seus próprios hábitos).
+- **João Pedro Biguelini**: Implementação do cloud firestore.
+- **Luiz Gustavo Rodrigues Cardoso**: Implementação da autenticação com o firebase authentication.
 
 ---
 
